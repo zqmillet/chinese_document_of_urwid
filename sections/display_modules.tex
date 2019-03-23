@@ -7,3 +7,47 @@
     \caption{\urwid{} 库中的显示模块}
     \label{fig:display_models_of_urwid_library}
 \end{figure}
+
+通常情况下, 你需要为 \inlinepython{MainLoop} 的构造函数指定显示模块, 如\cref{code:specify_the_curses_display_for_main_loop} 所示.%
+%
+\begin{codebox}[
+  caption = 为 \inlinepython{MainLoop} 指定显示模块 \inlinepython{urwid.curses_display.Screen()},
+  label = code:specify_the_curses_display_for_main_loop
+]
+loop = MainLoop(widget, ..., screen = urwid.curses_display.Screen())
+\end{codebox}%
+%
+如果不指定显示模块, \inlinepython{MainLoop} 会采用默认值 \inlinepython{urwid.raw_display.Screen()}, 如\cref{code:specify_the_raw_display_for_main_loop} 所示.%
+%
+\begin{codebox}[
+  caption = 为 \inlinepython{MainLoop} 指定显示模块 \inlinepython{urwid.raw_display.Screen()},
+  label = code:specify_the_raw_display_for_main_loop
+]
+# These are the same
+loop = MainLoop(widget, ...)
+loop = MainLoop(widget, ..., screen = urwid.raw_display.Screen())
+\end{codebox}%
+
+\subsection[raw\_display 与 curses\_display 显示模块]{\inlinepython{raw_display} 与 \inlinepython{curses_display} 显示模块}
+\urwid{} 有两个显示模块, 分别用于终端和控制台的显示. \inlinepython{raw_display.Screen} 模块是一个纯 python 的显示模块, 没有任何外部依赖. \inlinepython{raw_display.Screen} 可以直接处理终端中的控制序列, 也是 \inlinepython{MainLoop} 中的默认显示模块. \inlinepython{curses_display.Screen} 模块利用了操作系统提供的 \inlinetext{curses} 或 \inlinetext{ncurses} 库. \inlinepython{curses_display.Screen} 模块做了屏幕更新的优化, 并且用 termcap 优化用户终端. 当检测到用户的终端只支持黑白模式, \inlinetext{curses} 和 \inlinetext{ncurses} 库将会禁用彩色, 所以, 当用 \inlinepython{curses_display.Screen} 注册一个调色板时, 需要为黑白模式单独设置一套属性. \cref{} 总结了两种模式的区别.%
+%
+\begin{table}[!htb]
+  \centering
+  \caption{\inlinepython{raw_display} 与 \inlinepython{curses_display} 显示模块区别}
+  \begin{tabu}{rll}
+  \tabucline[1pt]{-}
+                        & \intablepython{raw\_display} & \intablepython{curses\_display}\\
+  \hline
+    优化 C 代码	        & \no & \yes\\
+    兼容所有终端	    & \no & \yes\textsuperscript{1}\\
+    支持 UTF-8 编码	    & \yes & \yes\textsuperscript{2}\\
+    不用加粗高亮	    & \yes\textsuperscript{3} & \no\\
+    支持 88 色或 256 色 & \yes & \no\\
+    支持鼠标拖拽	    & \yes & \no\\
+    支持外部事件循环    & \yes & \no\\
+  \tabucline[1pt]{-}
+  \multicolumn{3}{l}{\footnotesize1. 需要 termcap 存在, 并且 TERM 环境变量配置正确}\\[-3pt]
+  \multicolumn{3}{l}{\footnotesize2. 需要 python 与 \intabletext{ncurses} 库关联}\\[-3pt]
+  \multicolumn{3}{l}{\footnotesize3. 需要 使用 \intabletext{xterm} 或 \intabletext{gnome-terminal}}\\
+  \end{tabu}
+\end{table}

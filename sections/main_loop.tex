@@ -1,0 +1,8 @@
+\section{主循环}
+主循环 \inlinetext{MainLoop} 与显示模块, 组件集合以及时间循环是绑定的. \inlinetext{MainLoop} 负责将显示模块的输入传递给组件, 并渲染组件.
+
+利用 \inlinepython{MainLoop.input_filter()} 方法, 你可以实现屏蔽用户输入的功能, 或者利用一些特殊的代码去拦截用户输入, 使用户输入无法达到组件, 比如 \inlinepython{MainLoop.unhandled_input()} 方法.
+
+使用 \inlinepython{MainLoop.set_alarm_at()} 或 \inlinepython{MainLoop.set_alarm_in()} 方法, 你可以设置定时任务. 这两个方法在调用回调函数后可以自动的调用 \inlinepython{MainLoop.draw_screen()} 方法. 如果你想关闭定时任务, 可以使用 \inlinepython{MainLoop.remove_alarm()} 方法.
+
+当主循环正在运行时, 只要触发了 \inlinepython{ExitMainLoop} 异常, 都会退出主循环, 并释放所有资源. 如果任何其他的异常出现在主循环中, 主循环将关闭显示模块, 然后再进入该异常的处理模块, 以避免终端状态的不正常. 我们在这里强烈建议使用 \inlinetext{MainLoop}, 如果 \inlinetext{MainLoop} 无法满足你的需求, 你可以自己实现一个主循环, \urwid{} 中的其他部分不依赖于 \inlinetext{MainLoop}.

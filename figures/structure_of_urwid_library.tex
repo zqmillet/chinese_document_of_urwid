@@ -4,7 +4,9 @@
   circleblock/.style = {circle, draw, inner sep = 0pt, align = flush center, minimum size = 2cm},
   squareblock/.style = {rectblock, draw, align = flush center, inner sep = 0pt, minimum width = 2cm, minimum height = 2cm},
   x = 1.2cm,
-  y = 0.8cm
+  y = 0.8cm,
+  shorten >= 3pt,
+  shorten <= 3pt,
 ]
   \node[rectblock]   (ml) at (7, 8) {main loop};
   \node[roundblock]  (dm) at (3, 5) {display\\modules};

@@ -1,0 +1,14 @@
+\begin{tikzpicture}[
+  block/.style = {rectangle, draw, minimum width = 3cm, minimum height = 3cm, inner sep = 0pt, align = flush center}
+]
+  \node[block, fill = cyan, minimum height = 6cm] (rd) at (0, 6) {\mintinline{python}{raw_display}};
+  \node[block, fill = cyan] (cd) at (3.4, 7.5) {\mintinline{python}{curses_display}};
+  \node[block, fill = cyan] (wd) at (6.8, 7.5) {\mintinline{python}{web_display}};
+  \node[block, fill = cyan, minimum height = 6cm] (hf) at (10.2, 6) {\mintinline{python}{html_fragment}};
+  
+  \node[block] (nl) at (3.4, 4.5) {\inlinetext{ncurses} library};
+  \node[block] (ac) at (6.8, 4.5) {\inlinetext{apache} / \inlinetext{CGI}};
+  \node[block, minimum width = 6.4cm] (ct) at (1.7, 1.5) {console or terminal};
+  \node[block] (wb) at (6.8, 1.5) {web browser};
+  \node[block] (ht) at (10.2, 1.5) {html file};
+\end{tikzpicture}

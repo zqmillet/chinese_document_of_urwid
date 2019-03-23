@@ -6,3 +6,61 @@
 使用 \inlinepython{MainLoop.set_alarm_at()} 或 \inlinepython{MainLoop.set_alarm_in()} 方法, 你可以设置定时任务. 这两个方法在调用回调函数后可以自动的调用 \inlinepython{MainLoop.draw_screen()} 方法. 如果你想关闭定时任务, 可以使用 \inlinepython{MainLoop.remove_alarm()} 方法.
 
 当主循环正在运行时, 只要触发了 \inlinepython{ExitMainLoop} 异常, 都会退出主循环, 并释放所有资源. 如果任何其他的异常出现在主循环中, 主循环将关闭显示模块, 然后再进入该异常的处理模块, 以避免终端状态的不正常. 我们在这里强烈建议使用 \inlinetext{MainLoop}, 如果 \inlinetext{MainLoop} 无法满足你的需求, 你可以自己实现一个主循环, \urwid{} 中的其他部分不依赖于 \inlinetext{MainLoop}.
+
+\subsection{组件显示}
+主循环 \inlinepython{MainLoop} 中最上层的组件必须作为构造函数的第一个参数传入 \inlinepython{MainLoop}. 如果你想在运行时切换最上层的组件, 你可以将新组件赋给主循环 \inlinepython{MainLoop} 的 \inlinepython{MainLoop.widget} 属性. 当程序含有大量模式和界面的时候, 可以尝试这么做, 非常有效. 界面上的组件被用于处理用户输入, 因此, 最好扩展组件, 让其与程序的特点输入一起显示, 以便在小部件发生更改时应用程序的行为发生更改.
+
+\subsection{事件循环}
+\indent\urwid{} 的事件循环用于等待主循环中的各种事件. 不同的事件循环允许你集成 \inlinetext{Glib}, \inlinetext{Tornado}, \inlinetext{Asyncio} 等等第三方库. 事件循环抽象了等待输入以及调用函数等待超时的细节. 即使运行多个主循环, 应用程序中通常也只有一个事件循环. 利用 \inlinepython{watch_file()} 可以实现用文件来监控事件循环. 在使用 \inlinetext{Glib}, \inlinetext{Tornado} 或 \inlinetext{Asyncio} 回调时, 使用这个接口可以对 \inlinepython{ExitMainLoop} 和其他异常进行特殊处理.
+
+\subsubsection[SelectEventLoop]{\inlinepython{SelectEventLoop}}
+这个事件循环基于 \inlinepython{select.select()}. 如果初始化 \inlinepython{MainLoop} 的时候没有指定事件循环时, 这个会被作为默认事件循环.
+
+\begin{codebox}[
+  caption = 利用 \inlinepython{SelectEventLoop} 初始化 \inlinepython{MainLoop}
+]
+# same as urwid.MainLoop(widget, event_loop = urwid.SelectEventLoop())
+loop = urwid.MainLoop(widget)
+\end{codebox}
+
+\subsubsection[TwistedEventLoop]{\inlinepython{TwistedEventLoop}}
+这个事件利用 \inlinetext{Twisted} 的 Reactor. \inlinepython{TwistedEventLoop} 可以模仿 \inlinepython{SelectEventLoop} 的行为, 当遇到错误的时候, 可以关闭 Reactor. 这并不是 \inlinetext{Twisted} 的 Reactor 的标准用法, 所以需要在程序中修改其行为.
+
+\begin{codebox}[
+  caption = 利用 \inlinepython{TwistedEventLoop} 初始化 \inlinepython{MainLoop}
+]
+loop = urwid.MainLoop(widget, event_loop = urwid.TwistedEventLoop())
+\end{codebox}
+
+\subsubsection[GLibEventLoop]{\inlinepython{GLibEventLoop}}
+这个事件使用 \inlinetext{GLib} 的事件循环. 如果你的应用程序依赖于 DBus 事件的时候, 这个将非常有用.
+
+\begin{codebox}[
+  caption = 利用 \inlinepython{GLibEventLoop} 初始化 \inlinepython{MainLoop}
+]
+loop = urwid.MainLoop(widget, event_loop = urwid.GLibEventLoop())
+\end{codebox}
+
+\subsubsection[TornadoEventLoop]{\inlinepython{TornadoEventLoop}}
+这个事件循环集成了 \inlinetext{Tornado}.
+
+\begin{codebox}[
+  caption = 利用 \inlinepython{TornadoEventLoop} 初始化 \inlinepython{MainLoop}
+]
+from tornado.ioloop import IOLoop
+
+event_loop = urwid.TornadoEventLoop(IOLoop())
+loop = urwid.MainLoop(widget, event_loop = event_loop)
+\end{codebox}
+
+\subsubsection[AsyncioEventLoop]{\inlinepython{AsyncioEventLoop}}
+这个事件循环集成了 python 3.3 中的 \inlinetext{asyncio} 模块, \inlinetext{asyncio} 在 python 3.3 及以上版本都可以使用, 如果你用的是 python 2, 请使用 \inlinetext{trollius} 模块.
+
+\begin{codebox}[
+  caption = 利用 \inlinepython{AsyncioEventLoop} 初始化 \inlinepython{MainLoop}
+]
+import asyncio
+
+event_loop = urwid.AsyncioEventLoop(loop = asyncio.get_event_loop())
+loop = urwid.MainLoop(widget, event_loop = event_loop)
+\end{codebox}

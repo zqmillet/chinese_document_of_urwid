@@ -29,25 +29,55 @@ loop = MainLoop(widget, ..., screen = urwid.raw_display.Screen())
 \end{codebox}%
 
 \subsection[raw\_display 与 curses\_display 显示模块]{\inlinepython{raw_display} 与 \inlinepython{curses_display} 显示模块}
-\urwid{} 有两个显示模块, 分别用于终端和控制台的显示. \inlinepython{raw_display.Screen} 模块是一个纯 python 的显示模块, 没有任何外部依赖. \inlinepython{raw_display.Screen} 可以直接处理终端中的控制序列, 也是 \inlinepython{MainLoop} 中的默认显示模块. \inlinepython{curses_display.Screen} 模块利用了操作系统提供的 \inlinetext{curses} 或 \inlinetext{ncurses} 库. \inlinepython{curses_display.Screen} 模块做了屏幕更新的优化, 并且用 termcap 优化用户终端. 当检测到用户的终端只支持黑白模式, \inlinetext{curses} 和 \inlinetext{ncurses} 库将会禁用彩色, 所以, 当用 \inlinepython{curses_display.Screen} 注册一个调色板时, 需要为黑白模式单独设置一套属性. \cref{} 总结了两种模式的区别.%
+\indent\urwid{} 有两个显示模块, 分别用于终端和控制台的显示. \inlinepython{raw_display.Screen} 模块是一个纯 python 的显示模块, 没有任何外部依赖. \inlinepython{raw_display.Screen} 可以直接处理终端中的控制序列, 也是 \inlinepython{MainLoop} 中的默认显示模块. \inlinepython{curses_display.Screen} 模块利用了操作系统提供的 \inlinetext{curses} 或 \inlinetext{ncurses} 库. \inlinepython{curses_display.Screen} 模块做了屏幕更新的优化, 并且用 termcap 优化用户终端.
+
+当检测到用户的终端只支持黑白模时, \inlinetext{curses} 和 \inlinetext{ncurses} 库将会自动禁用彩色模式, 所以, 当用 \inlinepython{curses_display.Screen} 注册一个调色板时, 需要为黑白模式单独设置一套属性. \cref{tab:differences_between_the_two_modules} 总结了两种模式的区别.%
 %
 \begin{table}[!htb]
   \centering
   \caption{\inlinepython{raw_display} 与 \inlinepython{curses_display} 显示模块区别}
-  \begin{tabu}{rll}
+  \label{tab:differences_between_the_two_modules}
+  \begin{tabu}{rcc}
   \tabucline[1pt]{-}
-                        & \intablepython{raw\_display} & \intablepython{curses\_display}\\
+                        & \inlinepython{raw_display} & \inlinepython{curses_display}\\
   \hline
-    优化 C 代码	        & \no & \yes\\
-    兼容所有终端	    & \no & \yes\textsuperscript{1}\\
-    支持 UTF-8 编码	    & \yes & \yes\textsuperscript{2}\\
-    不用加粗高亮	    & \yes\textsuperscript{3} & \no\\
+    优化 C 代码	        & \no  & \yes\\
+    兼容所有终端	    & \no  & \yes\makebox[0pt][l]{\textsuperscript{1}}\\
+    支持 UTF-8 编码	    & \yes & \yes\makebox[0pt][l]{\textsuperscript{2}}\\
+    不用加粗高亮	    & \yes\makebox[0pt][l]{\textsuperscript{3}} & \no\\
     支持 88 色或 256 色 & \yes & \no\\
     支持鼠标拖拽	    & \yes & \no\\
     支持外部事件循环    & \yes & \no\\
   \tabucline[1pt]{-}
   \multicolumn{3}{l}{\footnotesize1. 需要 termcap 存在, 并且 TERM 环境变量配置正确}\\[-3pt]
-  \multicolumn{3}{l}{\footnotesize2. 需要 python 与 \intabletext{ncurses} 库关联}\\[-3pt]
-  \multicolumn{3}{l}{\footnotesize3. 需要 使用 \intabletext{xterm} 或 \intabletext{gnome-terminal}}\\
+  \multicolumn{3}{l}{\footnotesize2. 需要 python 与 \inlinetext{ncurses} 库关联}\\[-3pt]
+  \multicolumn{3}{l}{\footnotesize3. 需要 使用 \inlinetext{xterm} 或 \inlinetext{gnome-terminal}}\\
   \end{tabu}
 \end{table}
+
+\subsection{其它显示模块}
+\subsubsection[CGI Web 显示模块 web\_display]{CGI Web 显示模块 \inlinetext{web_display}}
+\indent\inlinepython{urwid.web_display} 可以使你的程序像一个在 Apache 环境下的 CGI 脚本, 而不是运行在终端中. 这个显示模块还处在概念验证阶段, 目前还存在安全和响应性能的问题亟待解决, 所以不建议在生产环境中使用. 例子中的 \inlinetext{tour.py} 和 \inlinetext{calc.py} 使用的就是这种现实模式.
+
+\subsubsection[Screenshot 显示模块 html\_fragment]{屏幕截图显示模块 \inlinetext{html_fragment}}
+\indent\urwid{} 的界面可以被渲染成 HTML. 每当 \inlinepython{html_fragment.HtmlGenerator.draw_screen()} 被调用时, \inlinepython{html_fragment.HtmlGenerator} 显示模块可以通过模拟用户输入然后捕捉屏幕为 HTML 片段. 这些片段可能被包含在 HTML 文档中, 并且可以被浏览器正确渲染, 这需要使用等款字体, 并且需要标记为 \inlinetext{<pre>}. HTML 渲染出来的界面可以被搜索, 也可以被选中, 如果用户调整浏览器的字体, 这些文本也可以同步的进行缩放.
+
+\subsubsection[LCD 显示模块 lcd\_display]{LCD 显示模块 \inlinetext{lcd_display}}
+几乎所有的设备在网格中显示字符都可以被当做一个显示器. \inlinetext{lcd_display} 显示模块为 LCD 显示器的字符显示提供一些基类, 包 \inlinepython{lcd_display.CF635Screen} 就是为 Crystal Fontz 635 USB 这款设备设计的.
+
+\subsection{设置调色板}
+\indent\inlinetext{MainLoop} 的构造函数可以接受 \inlinepython{palette} 参数, 并且参数 \inlinepython{palette} 的值会被传递给显示模块的 \inlinepython{register_palette()} 方法. 调色板 \inlinepython{palette} 是一个显示属性名字以及前景色背景色设置构成的列表. 显示模块可能运行在黑白模式中, 正常模式或者高彩色模式, 你应该为每一个模式设置不同的前景色和背景色, 如\cref{code:example_of_palette} 所示.
+
+\begin{codebox}[
+  caption = 调色板举例,
+  label = code:example_of_palette
+]
+palette = [
+    ('headings', 'white,underline', 'black', 'bold,underline'), # bold text in monochrome mode
+    ('body_text', 'dark cyan', 'light gray'),
+    ('buttons', 'yellow', 'dark green', 'standout'),
+    ('section_text', 'body_text'), # alias to body_text
+]
+
+loop = MainLoop(widget, palette = palette)
+\end{codebox}

@@ -300,12 +300,16 @@
     }%
   ]{#2}%
 }
+\tabuDisableCommands{%
+  \renewcommand\mintinline[2]{\texttt{\detokenize{#2}}}%
+}
 \makeatother
-\newcommand{\inlinetext}[1]{\inlinebox[frame rule color = blue]{\mintinline{text}{#1}}}
-\newcommand{\intabletext}[1]{\inlinebox[frame rule color = blue]{\tt #1}}
-\newcommand{\inlinepython}[1]{\inlinebox[frame rule color = black!20]{\mintinline{python}{#1}}}
-\newcommand{\intablepython}[1]{\inlinebox[frame rule color = black!20]{\tt #1}}
-
+\newcommand{\inlinetext}[1]{%
+ \inlinebox[frame rule color = blue]{\mintinline{text}{#1}}%
+}
+\newcommand{\inlinepython}[1]{%
+  \inlinebox[frame rule color = black!20]{\mintinline{python}{#1}}%
+}
 
 % 设置行间代码
 \usemintedstyle[python]{default}

@@ -33,3 +33,25 @@
   \item 如果组件 (e) 返回按键信息, 则组件 (b) 要么处理按键, 要么直接返回这个按键信息.
   \item 如果组件 (b) 返回按键信息, 则组件 (a) 处理按键信息.
 \end{itemize}
+
+\subsection{盒子组件, 瀑布流组件和固定组件}
+组件的尺寸的单位是屏幕的行数和列数. 行数和列数都给定的组件被称为盒子组件. 最上层的组件必须是盒子组件. 控制台中的大部分信息都是文本, 显示文本的最佳方式是瀑布流的形式, 承载这种显示内容的组件被称为瀑布流组件. 瀑布流组件需要指定列数, 而不用指定行数, 他可以根据需求自己计算行数. 有一种组件可以知道自己尺寸, 这种组件被称为固定组件. 这三种组件的尺寸计算如\cref{tab:how_a_widgets_size_is_determined} 所示.%
+%
+\begin{table}[!htb]
+    \caption{三种组件尺寸计算}
+    \label{tab:how_a_widgets_size_is_determined}
+    \centering
+    \begin{tabu}{lll}
+    \tabucline[1pt]{-}
+      组件类型 & 宽 & 长\\
+    \hline
+      盒子组件 & 由容器决定 & 由容器决定\\
+      瀑布流组件 & 由容器决定 & 由组件的 \smash{\inlinepython{row()}} 方法决定 \\
+      固定组件 & 由组件的 \smash{\inlinepython{pack()}} 方法决定 & 由组件的 \smash{\inlinepython{pack()}} 方法决定\\
+    \tabucline[1pt]{-}
+    \end{tabu}
+\end{table}
+
+\indent\urwid{} 有一个约定, 那就是用变量 \inlinepython{maxcol} 和 \inlinepython{maxrow} 存储组件的尺寸. 盒子组件需要同时指定变量 \inlinepython{maxcol} 和 \inlinepython{maxrow}. 瀑布流组件需要一个 \inlinepython{(maxcol,)} 来指定尺寸, 因为瀑布流的高度可以根据内容自动计算. 固定组件需要 \inlinepython{()} 来指定尺寸, 因为固定组件会自动计算自身尺寸.
+
+\subsection{內建组件}

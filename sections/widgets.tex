@@ -67,4 +67,13 @@
 基本组件和图形组件用来和用户进行交互, 也可以成为自定义组件的一部分. 除此之外还有修饰组件和容器组件, 下面分别对修饰组件和容器组件进行详细介绍.
 
 \subsection{修饰组件}
+修饰组件可以更改单个组件的外观和位置. 可以访问修饰组件的 \inlinepython{original_widget} 属性访问其所包含的组件. 如果你使用多个装饰组件, 则可以通过 \inlinepython{base_widget} 来访问 \inlinepython{original_widget}. \inlinepython{Widget.base_widget} 指向所有非修饰组件的 \inlinepython{self} 变量, 所以修饰组件在任何条件下都是安全的.
+
 \subsection{容器组件}
+容器组件可以将自身的可用空间按照其所包含的组件分割成若干部分, 即组件的布局. 在处理可选中的组件时, 容器组件同时可以跟踪其子组件的焦点. 容器组件可以互相嵌套, 因此, 焦点所在的组件可能比最上面的组件低跟多层. 不论你使用何种类型的容器组件, 你都可以使用 \urwid{} 提供的通用 API. 对于访问和修改内容的特定的旧方法, 仍然保持向后兼容性, 但是, 这个 API 现在是修改和遍历容器的首选方法.
+
+\indent\inlinepython{container.focus} 是一个只读属性, 可以返回该容器中焦点所在的组件. 如果容器组件是空的, 或者是非容器组件, 那么将返回 \inlinepython{None}.
+
+\indent\inlinepython{container.focus_position} 是一个可读写的属性, 可以用来访问容器中焦点空间的位置. 这通常是一个整数值, 但也可以是任何对象. 使用\inlinepython{SimpleListWalker} 或 \inlinepython{SimpleFocusListWalker} 作为其主体的 \inlinepython{Columns}, \inlinepython{Pile}, \inlinepython{GridFlow}, \inlinepython{Overlay} 和 \inlinepython{ListBox} 是使用整数作为其位置参数. 而 \inlinepython{Frame} 使用 \inlinepython{body}, \inlinepython{header} 和 \inlinepython{footer} 作为其位置参数. 带有自定义列表遍历器的 \inlinepython{ListBox} 将使用列表遍历器返回值作为位置参数. 如果访问一个空容器或者一个非容器组件的 \inlinepython{focus_position} 参数, 会引发 \inlinepython{IndexError} 异常. 对这个属性进行非法赋值, 也会引发 \inlinepython{IndexError} 异常. 对 \inlinepython{focus_position} 赋值, 将会自动将该组件标记为需要重绘.
+
+\indent\inlinepython{container.contents} 是一个只读属性, 可以用来访问一个字典或者列表形式的子组件, 这些选项用来在此容器中显示这些子组件. 字典或者列表对象允许使用 \inlinepython{__getitem__()} 读取其元素, 并且支持通过调用 \inlinepython{__setitem__()} 和 \inlinepython{__delitem__()} 方法来进行赋值和删除. 当这个属性被修改, 该对象中的所有组件都将被标记为需要重绘. \inlinepython{Columns}, \inlinepython{Pile} 和 \inlinepython{GridFlow} 允许给其 \inlinepython{container.contents} 赋给一个新的迭代器, 来替换原来的值. \inlinepython{Columns}, \inlinepython{Pile}, \inlinepython{Overlay} 和 \inlinepython{Frame} 都支持 \inlinepython{container.contents} 元素的赋值和删除.

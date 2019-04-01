@@ -116,4 +116,26 @@ x    x  x    x  x
   \node[blank, boxflow, anchor = north, align = flush center, minimum width = 1.2cm, text width = 1cm] (columns') at ([yshift = \vsep, xshift = -0.9cm]columns.south) {widget\_\\list[0]};
   \node[blank, boxflow, anchor = north, align = flush center, minimum width = 1.2cm, text width = 1cm] (columns') at ([yshift = \vsep, xshift = 0.3cm]columns.south) {widget\_\\list[1]};
   \node[blank, boxflow, anchor = north, align = flush center, minimum width = 0.6cm, text width = 1cm, text width = 0.6cm] (columns') at ([yshift = \vsep, xshift = 1.2cm]columns.south) {...};
+  
+  \node[boxflow, title] (pile) at ([xshift = \hsep]columns) {Pile};
+  \node[blank, anchor = north] (pile') at ([yshift = \vsep]pile.south) {};
+  \node[blank, boxflow, minimum height = 0.6cm, align = flush center] at ([yshift =  0.9cm]pile'.center) {widget\_list[0]};
+  \node[blank, boxflow, minimum height = 0.6cm, align = flush center] at ([yshift =  0.3cm]pile'.center) {widget\_list[1]};
+  \node[blank, boxflow, minimum height = 0.6cm, align = flush center] at ([yshift =  -0.3cm]pile'.center) {widget\_list[2]};
+  \node[blank, boxflow, minimum height = 0.6cm, align = flush center] at ([yshift =  -0.9cm]pile'.center) {...};
+  
+  \node[box, title] (frame) at ([xshift = \hsep]pile) {Frame};
+  \node[blank, anchor = north] (frame') at ([yshift = \vsep]frame.south) {};
+  \node[blank, flow, minimum height = 0.6cm, align = flush center] at ([yshift =  0.9cm]frame'.center) {header (optional)};
+  \node[blank, box, minimum height = 1.2cm, align = flush center] at (frame'.center) {body};
+  \node[blank, flow, minimum height = 0.6cm, align = flush center] at ([yshift =  -0.9cm]frame'.center) {footer (optional)};
+  
+  \node[boxflow, title] (listbox) at ([xshift = \hsep]frame) {ListBox};
+  \node[blank, anchor = north] (listbox') at ([yshift = \vsep]listbox.south) {};
+  \node[blank, boxflow, minimum height = 0.6cm, align = flush center] at ([yshift =  0.9cm]listbox'.center) {body[0]};
+  \node[blank, boxflow, minimum height = 0.6cm, align = flush center] at ([yshift =  0.3cm]listbox'.center) {body[1]};
+  \node[blank, boxflow, minimum height = 0.6cm, align = flush center] (listbox'') at ([yshift =  -0.3cm]listbox'.center) {...};
+  \draw[<->] (listbox'.south) -- (listbox''.south);
+  
+  
 \end{tikzpicture}

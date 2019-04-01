@@ -1,18 +1,22 @@
 \def\hsep{3.6cm}
 \def\vsep{-0.2cm}
 
+\definecolor{cflow}{rgb}{0.91, 0.78, 0.69}
+\definecolor{cbox}{rgb}{0.69, 0.78, 0.91}
+\definecolor{cfixed}{rgb}{1.00, 0.93, 0.67}
+
 \begin{tikzpicture}[
   all/.style = {fill plain picture = {
-    \draw[yellow, line width = 0.9cm] ( 0,-1) -- (2,1);
-    \draw[blue!20,   line width = 0.9cm]   (-2,-1) -- (0,1);
-    \draw[red,    line width = 0.9cm]   (-1,-1) -- (1,1);
+    \draw[cfixed, line width = 1.3cm] ( 0,-1) -- (2,1);
+    \draw[cbox,   line width = 1.3cm] (-2,-1) -- (0,1);
+    \draw[cflow,  line width = 1.0cm] (-1,-1) -- (1,1);
   }},
-  box/.style = {fill = blue!20},
-  flow/.style = {fill = red},
-  fixed/.style = {fill = yellow},
+  box/.style = {fill = cbox},
+  flow/.style = {fill = cflow},
+  fixed/.style = {fill = cfixed},
   boxflow/.style = {fill plain picture = {
-    \node[fill = blue!20, line width = 0pt, draw = none, minimum size = 4cm, rotate = 45, anchor = south] at (0, 0) {};
-    \node[fill = red, line width = 0pt, draw = none, minimum size = 4cm, rotate = 45, anchor = north]  at (0, 0) {};
+    \node[fill = cbox, line width = 0pt, draw = none, minimum size = 4cm, rotate = 45, anchor = south] at (0, 0) {};
+    \node[fill = cflow, line width = 0pt, draw = none, minimum size = 4cm, rotate = 45, anchor = north]  at (0, 0) {};
   }},
   title/.style = {rectangle, minimum width = 3cm, minimum height = 0.5cm, text width = 3cm, align = left, font = \bfseries\ttfamily},
   widget/.style = {title, draw, font = \footnotesize\normalfont\ttfamily},
@@ -43,8 +47,8 @@
   \draw[<->] (divider'.north) -- ([yshift = 0.2cm]divider'.center);
   \draw[<->] (divider'.south) -- ([yshift = -0.2cm]divider'.center);
 
-  \node[title, box] (divider) at ([yshift = -5cm]text) {BarGraph};
-  \node[blank, anchor = north, align = flush center] (divider') at ([yshift = \vsep]divider.south) {%
+  \node[title, box] (bargraph) at ([yshift = -5cm]text) {BarGraph};
+  \node[blank, anchor = north, align = flush center] (bargraph') at ([yshift = \vsep]bargraph.south) {%
     \begin{minipage}[t]{3cm}
 \begin{verbatim}
     xx   xx          
@@ -58,7 +62,7 @@ xxxxxxxxxxxxxxxxxxxxx
     \end{minipage}
   };
   
-  \node[title, box] (graphvscale) at ([xshift = \hsep]divider) {GraphVScale};
+  \node[title, box] (graphvscale) at ([xshift = \hsep]bargraph) {GraphVScale};
   \node[blank, anchor = north, align = flush left] (graphvscale') at ([yshift = \vsep]graphvscale.south) {%
       Label1\\\ \\
       Label2\\\ \\
@@ -82,4 +86,7 @@ x    x  x    x  x
 \end{verbatim}
   \end{minipage}
   };
+  
+  \node[all, title] (padding) at ([yshift = -5cm]bargraph) {Padding};
+  \node[blank, anchor = north, align = flush center] (bargraph1) at ([yshift = \vsep]padding.south) {};
 \end{tikzpicture}

@@ -7,9 +7,9 @@
 
 \begin{tikzpicture}[
   all/.style = {fill plain picture = {
-    \draw[cfixed, line width = 1.3cm] ( 0,-1) -- (2,1);
-    \draw[cbox,   line width = 1.3cm] (-2,-1) -- (0,1);
-    \draw[cflow,  line width = 1.0cm] (-1,-1) -- (1,1);
+    \draw[cfixed, line width = 2.5cm] (-1,-2) -- (3,2);
+    \draw[cbox,   line width = 2.5cm] (-3,-2) -- (1,2);
+    \draw[cflow,  line width = 1.2cm] (-2,-2) -- (2,2);
   }},
   box/.style = {fill = cbox},
   flow/.style = {fill = cflow},
@@ -18,7 +18,7 @@
     \node[fill = cbox, line width = 0pt, draw = none, minimum size = 4cm, rotate = 45, anchor = south] at (0, 0) {};
     \node[fill = cflow, line width = 0pt, draw = none, minimum size = 4cm, rotate = 45, anchor = north]  at (0, 0) {};
   }},
-  title/.style = {rectangle, minimum width = 3cm, minimum height = 0.5cm, text width = 3cm, align = left, font = \bfseries\ttfamily},
+  title/.style = {rectangle, minimum width = 3cm, minimum height = 0.5cm, text width = 3cm, align = left, font = \bfseries\ttfamily, inner sep = 0pt},
   widget/.style = {title, draw, font = \footnotesize\normalfont\ttfamily},
   blank/.style = {widget, minimum height = 2.4cm},
   shorten >= 0.2cm,
@@ -88,5 +88,32 @@ x    x  x    x  x
   };
   
   \node[all, title] (padding) at ([yshift = -5cm]bargraph) {Padding};
-  \node[blank, anchor = north, align = flush center] (bargraph1) at ([yshift = \vsep]padding.south) {};
+  \node[blank, anchor = north, align = flush center] (padding') at ([yshift = \vsep]padding.south) {};
+  \node[blank, all, minimum width = 1.5cm, text width = 1.5cm, align = flush center] (padding'') at (padding') {\texttt{original\_}\\\texttt{widget}};
+  \draw[<->] (padding'.west) -- (padding''.west);
+  \draw[<->] (padding'.east) -- (padding''.east);
+  
+  
+  \node[box, title] (filler) at ([xshift = \hsep]padding) {Filler};
+  \node[blank, anchor = north, align = flush center] (filler') at ([yshift = \vsep]filler.south) {};
+  \node[blank, boxflow, minimum height = 0.6cm, align = flush center] (filler'') at (filler') {\texttt{original\_}\\\texttt{widget}};
+  \draw[<->] (filler'.north) -- (filler''.north);
+  \draw[<->] (filler'.south) -- (filler''.south);
+  
+  \node[all, title] (attrmap) at ([xshift = \hsep]filler) {AttrMap};
+  \node[blank, all, anchor = north, align = flush center] (attrmap') at ([yshift = \vsep]attrmap.south) {original\_widget (with attributes possibly altered)};
+  
+  \node[flow, title] (boxadapter) at ([xshift = \hsep]attrmap) {BoxAdapter};
+  \node[blank, box, anchor = north, align = flush center] (boxadapter') at ([yshift = \vsep]boxadapter.south) {original\_widget};
+  
+  \node[boxflow, title] (linebox) at ([xshift = \hsep]boxadapter) {LineBox};
+  \node[blank, anchor = north] (linebox') at ([yshift = \vsep]linebox.south) {};
+  \node[blank, dashed, minimum height = 2cm, minimum width = 2.6cm, text width = 0cm, inner sep = 0pt] at (linebox') {};
+  \node[blank, boxflow, align = flush center, minimum width = 2.2cm, minimum height = 1.6cm, text width = 2.2cm] at (linebox') {original\_widget};
+  
+  
+  \node[boxflow, title] (columns) at ([yshift = -5cm]padding) {Columns};
+  \node[blank, boxflow, anchor = north, align = flush center, minimum width = 1.2cm, text width = 1cm] (columns') at ([yshift = \vsep, xshift = -0.9cm]columns.south) {widget\_\\list[0]};
+  \node[blank, boxflow, anchor = north, align = flush center, minimum width = 1.2cm, text width = 1cm] (columns') at ([yshift = \vsep, xshift = 0.3cm]columns.south) {widget\_\\list[1]};
+  \node[blank, boxflow, anchor = north, align = flush center, minimum width = 0.6cm, text width = 1cm, text width = 0.6cm] (columns') at ([yshift = \vsep, xshift = 1.2cm]columns.south) {...};
 \end{tikzpicture}

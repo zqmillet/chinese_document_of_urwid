@@ -18,15 +18,17 @@
     \node[fill = cbox, line width = 0pt, draw = none, minimum size = 4cm, rotate = 45, anchor = south] at (0, 0) {};
     \node[fill = cflow, line width = 0pt, draw = none, minimum size = 4cm, rotate = 45, anchor = north]  at (0, 0) {};
   }},
-  title/.style = {rectangle, minimum width = 3cm, minimum height = 0.5cm, text width = 3cm, align = left, font = \bfseries\ttfamily, inner sep = 0pt},
-  widget/.style = {title, draw, font = \footnotesize\normalfont\ttfamily},
+  title/.style = {rectangle, minimum width = 3cm, minimum height = 0.5cm, text width = 2.7cm, align = left, font = \bfseries},
+  widget/.style = {title, draw, font = \footnotesize\normalfont\ttfamily, inner sep = 0pt},
   blank/.style = {widget, minimum height = 2.4cm},
-  shorten >= 0.2cm,
-  shorten <= 0.2cm,
+  shorten >= 0.1cm,
+  shorten <= 0.1cm,
+  > = stealth,
 ]
   \linespread{1}
+  
   \node[title, flow] (text) {Text};
-  \node[blank, anchor = north] (text') at ([yshift = \vsep]text.south) {text content wrapped or clipped to fill the available width, may also contain attributes (colors, underline, bold)\\\ };
+  \node[blank, anchor = north] (text') at ([yshift = \vsep]text.south) {text content wrapped or clipped to fill the available width, may also contain attributes (colors, underline, bold)};
   
   \node[title, flow] (edit) at ([xshift = \hsep]text) {Edit};
   \node[blank, anchor = north] (edit') at ([yshift = \vsep]edit.south) {user-editable text with an optional caption\\\ \\\ \\\ \\\ };
@@ -37,7 +39,7 @@
   \node[blank, anchor = south, minimum height = 0.6cm] (button3) at (edit'.south -| button) {  ( ) RadioButton};
   
   \node[title, box] (solidfill) at ([xshift = \hsep]button) {SolidFill};
-  \node[blank, anchor = north, align = flush center] (solidfill') at ([yshift = \vsep]solidfill.south) {xxxxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxxxx};
+  \node[blank, anchor = north, align = flush center] (solidfill') at ([yshift = \vsep]solidfill.south) {xxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxx\\xxxxxxxxxxxxxxxxxxx};
   
   \node[title, flow] (divider) at ([xshift = \hsep]solidfill) {Divider};
   \node[blank, anchor = north, align = flush center] (divider') at ([yshift = \vsep]divider.south) {};
@@ -51,13 +53,13 @@
   \node[blank, anchor = north, align = flush center] (bargraph') at ([yshift = \vsep]bargraph.south) {%
     \begin{minipage}[t]{3cm}
 \begin{verbatim}
-    xx   xx          
-   xxx   xxx xxx     
-   xxx   xxx xxx     
-   xxx   xxx xxxxxxxx
-xx xxx   xxx xxxxxxxx
-xx xxxxxxxxx xxxxxxxx
-xxxxxxxxxxxxxxxxxxxxx
+    xx   xx     
+   xxx   xxx xxx
+   xxx   xxx xxx
+   xxx   xxx xxxxxx
+xx xxx   xxx xxxxxx
+xx xxxxxxxxx xxxxxx
+xxxxxxxxxxxxxxxxxxx
 \end{verbatim}
     \end{minipage}
   };
@@ -76,13 +78,13 @@ xxxxxxxxxxxxxxxxxxxxx
   \node[blank, anchor = north, align = flush center] (bigtext') at ([yshift = \vsep]bigtext.south) {%
   \begin{minipage}[t]{3cm}
 \begin{verbatim}
-        x            
- xxxx   x            
-     x  x            
- xxxxx  xxxxx    xxxx
-x    x  x    x  x    
-x    x  x    x  x    
- xxxxx  xxxxx    xxxx
+       x            
+ xxx   x            
+    x  x            
+ xxxx  xxxx    xxxx
+x   x  x   x  x    
+x   x  x   x  x    
+ xxxx  xxxx    xxxx
 \end{verbatim}
   \end{minipage}
   };
@@ -137,5 +139,32 @@ x    x  x    x  x
   \node[blank, boxflow, minimum height = 0.6cm, align = flush center] (listbox'') at ([yshift =  -0.3cm]listbox'.center) {...};
   \draw[<->] (listbox'.south) -- (listbox''.south);
   
+  \node[flow, title] (gridflow) at ([xshift = \hsep]listbox) {GridFlow};
+  \node[blank, anchor = north] (gridflow') at ([yshift = \vsep]gridflow.south) {};
+  \node[blank, flow, minimum height = 0.8cm, minimum width = 1cm, text width = 1cm, align = flush center, font = \scriptsize\ttfamily] at ([xshift = -0.5cm, yshift = 0.8cm]gridflow') {cells[0]};
+  \node[blank, flow, minimum height = 0.8cm, minimum width = 1cm, text width = 1cm, align = flush center, font = \scriptsize\ttfamily] at ([xshift = 0.5cm, yshift = 0.8cm]gridflow') {cells[0]};
+  \node[blank, flow, minimum height = 0.8cm, minimum width = 1cm, text width = 1cm, align = flush center, font = \scriptsize\ttfamily] (gridflow1) at ([xshift = -0.5cm, yshift = 0.0cm]gridflow') {cells[0]};
+  \node[blank, flow, minimum height = 0.8cm, minimum width = 1cm, text width = 1cm, align = flush center, font = \scriptsize\ttfamily] (gridflow2) at ([xshift = 0.5cm, yshift = 0.0cm]gridflow') {cells[0]};
+  \node[blank, flow, minimum height = 0.8cm, minimum width = 1cm, text width = 1cm, align = flush center, font = \scriptsize\ttfamily] at ([xshift = -0.5cm, yshift = -0.8cm]gridflow') {cells[0]};
+  \node[blank, flow, minimum height = 0.8cm, minimum width = 1cm, text width = 1cm, align = flush center, font = \scriptsize\ttfamily] at ([xshift = 0.5cm, yshift = -0.8cm]gridflow') {cells[0]};
+  \draw[<->] (gridflow'.west) -- (gridflow1.west);
+  \draw[<->] (gridflow'.east) -- (gridflow2.east);
   
+  \node[box, title] (overlay) at ([xshift = \hsep]gridflow) {Overlay};
+  \node[blank, box, anchor = north] (overlay') at ([yshift = \vsep]overlay.south) {};
+  \node[blank, all, minimum width = 2cm, minimum height = 1.4cm, text width = 2cm, align = flush center] (overlay'') at (overlay') {top\_w};
+  \foreach \d in {east, north, west, south}{
+    \draw[<->] (overlay''.\d) -- (overlay'.\d);
+  }
+  \node[anchor = north west, font = \footnotesize\ttfamily] at (overlay'.north west) {bottom\_w};
+  
+  \node[blank, box, minimum height = 0.9cm, anchor = north west, align = flush center, font = \small\ttfamily] (box) at (bigtext.north -| overlay.west) {box widget};
+  \node[blank, flow, minimum height = 0.9cm, anchor = north, align = flush center, font = \small\ttfamily] (flow) at ([yshift = -0.2cm]box.south) {flow widget};
+  \node[blank, fixed, minimum height = 0.9cm, anchor = north, align = flush center, font = \small\ttfamily] (fixed) at ([yshift = -0.2cm]flow.south) {fixed widget};
+  
+  \node[anchor = west, font = \bfseries, inner sep = 0pt] at ([yshift = 0.8cm]text.west) {基本组件};
+  \node[anchor = west, font = \bfseries, inner sep = 0pt] at ([yshift = 0.8cm]bargraph.west) {图形组件};
+  \node[anchor = west, font = \bfseries, inner sep = 0pt] at ([yshift = 0.8cm]padding.west) {修饰组件};
+  \node[anchor = west, font = \bfseries, inner sep = 0pt] at ([yshift = 0.8cm]columns.west) {容器组件};
+  \node[anchor = west, font = \bfseries, inner sep = 0pt] at ([yshift = 0.8cm]box.west) {图例};
 \end{tikzpicture}

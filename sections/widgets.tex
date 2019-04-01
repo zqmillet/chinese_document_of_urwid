@@ -54,4 +54,17 @@
 
 \indent\urwid{} 有一个约定, 那就是用变量 \inlinepython{maxcol} 和 \inlinepython{maxrow} 存储组件的尺寸. 盒子组件需要同时指定变量 \inlinepython{maxcol} 和 \inlinepython{maxrow}. 瀑布流组件需要一个 \inlinepython{(maxcol,)} 来指定尺寸, 因为瀑布流的高度可以根据内容自动计算. 固定组件需要 \inlinepython{()} 来指定尺寸, 因为固定组件会自动计算自身尺寸.
 
-\subsection{內建组件}
+\subsection{内建组件}
+\indent\urwid{} 内建组件如\cref{fig:included_widgets} 所示.%
+%
+\begin{figure}[!htb]
+    \centering
+    \resizebox{\textwidth}{!}{\input{./figures/included_widgets.tex}}
+    \caption{\urwid{} 内建组件}
+    \label{fig:included_widgets}
+\end{figure}%
+%
+基本组件和图形组件用来和用户进行交互, 也可以成为自定义组件的一部分. 除此之外还有修饰组件和容器组件, 下面分别对修饰组件和容器组件进行详细介绍.
+
+\subsection{修饰组件}
+\subsection{容器组件}

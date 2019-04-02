@@ -81,3 +81,21 @@
 \indent\inlinepython{container.options(...)} 是一个成员方法, 可以返回用于添加到容器中的可选对象. 参数列表是容器类型, 与容器的构造函数 \inlinepython{__init__()} 的参数基本一致. 该方法返回的对象是一个由字符串和整数构成的元组, 如果容器没有子组件选项, 则返回 \inlinepython{None}. 这个方法的存在, 使得 \urwid{} 将来的版本也可以向已有的容器添加新的选项. 当添加新选项时, 期望选项元组保持不变的代码都将失败, 因此, 强烈建议使用选项元组进行防御性编程.
 
 \indent\inlinepython{container.__getitem__(x)}, 该方法可以被简写成 \inlinepython{container[x]}, 是一个快捷方法, 其作用于 \inlinepython{container.contents[x][0].base_widget} 的作用相同. 其作用是返回位置在 \inlinepython{x} 的子组件, 并且忽略所有的修饰组件. 修饰组件包含 \inlinepython{Padding}, \inlinepython{Filler}, \inlinepython{AttrMap} 等等.
+
+\indent\inlinepython{container.get_focus_path()} 返回焦点的路径. 焦这个由位置信息组成的列表, 是与其他 UI 框架最接近的点部件, 因为 \urwid{} 中的焦点部件依赖于其所有父容器的焦点设置.
+
+\indent\inlinepython{container.set_focus_path(p)} 是一个用于给 \inlinepython{focus_position} 属性赋值的方法, \inlinepython{p} 是路径中的所有容器构成的列表. 这个方法可以用于恢复一个组件的焦点, 焦点信息可以通过提前调用成员方法 \inlinepython{container.get_focus_path()} 来获得.
+
+\indent\inlinepython{container.get_focus_widgets()} 是一个方法, 返回值是从当前容器一直到非容器的所有组件的 \inlinepython{.focus} 的值的列表. 值得注意的是, 这个列表不包含 \inlinepython{container.get_focus_widgets()} 中的 \inlinepython{container}, 也就是最上层的容器组件, 但是包含最后一个非容器组件.
+
+\indent\inlinepython{container.__iter__()} 和 \inlinepython{container.__reversed__()} 用于容器组件内部控件的迭代. 通常情况下, \inlinepython{__reversed__()} 函数与 \inlinepython{__iter__()} 产生的顺序相反. 有用户自定义迭代器 \inlinepython{ListBox} 是一个例外. 值得注意的是, 一个用户自定义迭代器可以产生一个没有边界的整数, 所以, 当你使用 \inlinepython{ListBox} 时, 需要额外小心.
+
+\subsubsection{管道组件}
+
+\subsubsection{列组件}
+
+\subsubsection{网格流组件}
+
+\subsubsection{遮罩组件}
+
+\subsection{列表内容}

@@ -137,15 +137,19 @@
 \subsubsection{设置焦点}
 修改 \inlinepython{ListBox} 焦点控件的最简单的方法是调用 \inlinepython{ListBox.set_focus()} 函数. 该方法无需知道 \inlinepython{ListBox} 的长和宽. 传入 \inlinepython{set_focus()} 函数的位置对象必须与列表遍历器兼容. 对于 \inlinepython{SimpleListWalker} 来说, 位置对象必须是整数索引.
 
-\indent 如果你知道原来的位置是在之前的位置之上还是之下, 你需要设置 \inlinepython{coming_from} 参数. 当 \inlinpython{ListBox} 完成偏移量和百分比的设置后, 它会尝试去寻找原来的控件. 如果原来的控件仍然是可见的, 它将试图避免引发 \inlinpython{ListBox} 的内容从原来的位置向上或向下滚动. 如果控件是不可见的, 那么 \inlinpython{ListBox} 将:%
+\indent 如果你知道原来的位置是在之前的位置之上还是之下, 你需要设置 \inlinepython{coming_from} 参数. 当 \inlinepython{ListBox} 完成偏移量和百分比的设置后, 它会尝试去寻找原来的控件. 如果原来的控件仍然是可见的, 它将试图避免引发 \inlinepython{ListBox} 的内容从原来的位置向上或向下滚动. 如果控件是不可见的, 那么 \inlinepython{ListBox} 将:%
 %
 \begin{itemize}
-  \item 在 \inlinpython{ListBox} 的底端显示焦点控件, 如果参数 \inlinepython{coming_from} 的值表示之上;
-  \item 在 \inlinpython{ListBox} 的顶端显示焦点控件, 如果参数 \inlinepython{coming_from} 的值表示之下;
-  \item 在 \inlinpython{ListBox} 的中间显示焦点控件, 如果参数 \inlinepython{coming_from} 的值为 \inlinepython{None};
+  \item 在 \inlinepython{ListBox} 的底端显示焦点控件, 如果参数 \inlinepython{coming_from} 的值表示之上;
+  \item 在 \inlinepython{ListBox} 的顶端显示焦点控件, 如果参数 \inlinepython{coming_from} 的值表示之下;
+  \item 在 \inlinepython{ListBox} 的中间显示焦点控件, 如果参数 \inlinepython{coming_from} 的值为 \inlinepython{None};
 \end{itemize}%
 %
 如果你知道新的焦点控件的具体位置, 你应该调用 \inlinepython{ListBox.set_focus_valign()} 函数. 这个方法可以让你指定焦点控件的位置是顶部, 底部, 中部, 相对位置, 或是具体的行数.
 
-
 \subsubsection{列表迭代器}
+\indent\inlinepython{ListBox} 不直接管理它的内部控件, 它将这个工作交给了一个名为列表迭代器的对象. 列表迭代器持续跟踪焦点控件, 并且提供一个不透明的位置对象, \inlinepython{ListBox} 可以利用这个位置对象遍历焦点控件上方和下方的控件.
+
+\indent\inlinepython{SimpleFocusListWalker} 是一个行为与 Python 的 \inlinepython{list} 行为很像的列表迭代器. 当你想显示的控件数量不多也不少时, 你可以使用 \inlinepython{SimpleFocusListWalker}.
+
+如果你需要显示大量的控件, 你需要实现自己的列表遍历器去管理控件的创建和销毁. 列表遍历器还可以用于在 \inlinepython{ListBox} 显示树状图或是其它的结构. 我们也提供了很多自定义列表遍历器的例子.

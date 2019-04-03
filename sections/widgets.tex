@@ -91,19 +91,61 @@
 \indent\inlinepython{container.__iter__()} 和 \inlinepython{container.__reversed__()} 用于容器组件内部控件的迭代. 通常情况下, \inlinepython{__reversed__()} 函数与 \inlinepython{__iter__()} 产生的顺序相反. 有用户自定义迭代器 \inlinepython{ListBox} 是一个例外. 值得注意的是, 一个用户自定义迭代器可以产生一个没有边界的整数, 所以, 当你使用 \inlinepython{ListBox} 时, 需要额外小心.
 
 \subsubsection{管道组件}
+管道组件通过垂直堆叠, 将多个控件组成一个整体. 管道组件通过跟踪内部控件的的焦点, 实现管理多个可被选中的控件. 并且当检测到用户按 \inlinetext{UP} 和 \inlinetext{DOWN} 键时, 可以在多个控件中移动焦点. 管道控件也可以被用于 \inlinepython{ListBox} 中. 当且仅当管道控件的内部控件被选中时, 该管道控件才被选中. 如果你创建了一个包含一个文本控件和一个编辑控件的管道控件, 那么该管道控件将选择编辑控件作为默认的焦点控件.
 
 \subsubsection{列组件}
+列控件可以被用于将流控件或者盒子控件水平排列. 列控件通过跟踪内部控件的的焦点, 实现管理多个可被选中的控件. 并且当检测到用户按 \inlinetext{LEFT} 和 \inlinetext{RIGHT} 键时, 可以在多个控件中移动焦点. 列控件也可以被用于 \inlinepython{ListBox} 中. 当且仅当列控件的内部控件被选中时, 该列控件才被选中. 如果没有指定一个焦点列, 那么第一个可选控件的所在列将是焦点列.
 
 \subsubsection{网格流组件}
+网格流控件是一种流控件, 它主要针对 \inlinepython{Button}, \inlinepython{CheckBox} 和 \inlinepython{RadioButton} 这几种控件. 它会将所有包含的控件渲染成同样宽度, 并且从左到右, 从上到下依次排列. 网格流控件利用管道控件, 列控件, 填充控件, 分割控件构建一个显示控件, 用于处理键盘的输入以及控件的渲染. 当网格流控件的尺寸发生改变时, 它将重新生成该显示控件, 以便适应新的显示区域.
 
 \subsubsection{遮罩组件}
+遮罩控件是一个盒子控件, 它包含两个另外的盒子控件. 底部的控件的尺寸与遮罩控件尺寸一致, 顶部的控件被置于其上方. 遮罩控件可以被用于创建一个窗口的效果或者是弹出菜单的效果. 遮罩控件中的焦点空间总是位于顶部的控件, 所有的键盘输入都将被传递给该控件. 如果你想利用流控件作为遮罩控件的顶部控件时, 首先需要将流控件置于填充控件当中.
 
 \subsection{列表内容}
+\indent\inlinepython{ListBox} 是一个包含流控件的盒子控件. 其内部控件被垂直堆叠, 并且 \inlinepython{ListBox} 运行用户滚动显示其内容. 流控件中的被显示的控件是 \inlinepython{ListBox} 的焦点控件.
 
 \subsubsection{列表焦点和滚动}
+\indent\inlinepython{ListBox} 将按键信息传递给焦点控件来实现与用户之间的交互. 如果焦点控件无法处理按键, \inlinepython{ListBox} 将通过滚动, 或者是选择另一个控件, 使其变为焦点控件, 进而处理按键信息.
+
+当滚动 \inlinepython{ListBox} 或者改变焦点控件时, \inlinepython{ListBox} 将尝试最合理的操作. 当 \inlinepython{ListBox} 显示的控件都是文本控件或者是其他不能被选中的控件时, \inlinepython{ListBox} 的行为类似于浏览器, 当用户按下 \inlinetext{UP}, \inlinetext{DOWN}, \inlinetext{LEFT} 和 \inlinetext{RIGHT} 时, 文本控件将立即滚动. 当滚动时, \inlinepython{ListBox} 会选择一个可见的控件作为焦点控件. 当向上滚动时, \inlinepython{ListBox} 会选择最顶端的控件作为焦点控件, 如果想下滚动时, \inlinepython{ListBox} 会选择最底部的控件作为焦点控件.
+
+\indent\inlinepython{ListBox} 会使用焦点控件的偏移量或者百分比来记录其位置. 偏移量是一个数字, 为 \inlinepython{ListBox} 顶端与焦点控件之间的行数. 当偏移量的值为 \inlinepython{0} 时, 表示该控件与 \inlinepython{ListBox} 顶端对齐. 百分比是指控件到 \inlinepython{ListBox} 的行数与不可见行数的比值. \inlinepython{ListBox} 利用这个方法记录焦点控件的位置, 因此, 当 \inlinepython{ListBox} 的尺寸发生更改时, 文本显示仍然会保持在 \inlinepython{ListBox} 的顶部.
+
+当 \inlinepython{ListBox} 存在可以被选中的控件时, 焦点只会在可被选中的控件中移动. \inlinepython{ListBox} 将试图滚动, 使用户可以看到新的焦点控件. 这个行为可以被用于显示多个控件, 这些控件包括可选控件和其他控件, 并通过复合控件组合在一起, 并需要一起显示.
 
 \subsubsection{动态列表}
+当 \inlinepython{ListBox} 保存焦点控件的位置时, 它不会直接保存焦点控件或者 \inlinepython{ListBox} 中的其它内容. \inlinepython{ListBox} 中用于保存内容的功能被委托给列表迭代器的对象. 如果一个控件列表被送入 \inlinepython{ListBox} 的构造函数, 那么 \inlinepython{ListBox} 会产生一个 \inlinepython{SimpleListWalker} 对象来管理这个列表.
+
+当 \inlinepython{ListBox} 被渲染时, 或者处理输入数据时:%
+%
+\begin{itemize}
+  \item 调用列表迭代器的 \inlinepython{get_focus()} 函数, 该函数会返回焦点控件以及位置信息.
+  \item 选择性的调用列表迭代器的 \inlinepython{get_prev()} 函数一次或者多次, 首先传入焦点控件的位置信息, 然后每次在连续调用时, 返回新的位置. 这个方法可以用来获得焦点控件上方的控件以及控件位置.
+  \item 选择性的调用列表迭代器的 \inlinepython{get_next()} 函数一次或者多次, 类似的, 收集焦点控件下方的控件以及位置信息.
+  \item 选择性的调用列表迭代器的 \inlinepython{set_focus()} 函数, 其参数为上两个步骤的到的其中一个位置信息.
+\end{itemize}%
+%
+上述方法是 \inlinepython{ListBox} 访问其内容的唯一方法, 并且, 它将不会保存超出当前渲染或输入处理操作范围的控件或者位置信息的拷贝.
+
+\indent\inlinepython{SimpleListWalker} 保存了一个空间列表, 并且用整数进行位置索引. 同事, 它还使用一个整数表示当前焦点控件, 如果在焦点控件前插入一个新的控件, 你需要手动将焦点控件的索引加 \inlinepython{1}, 否则, \inlinepython{ListBox} 中的内容都会发生偏移.
+
+一个拥挤自定义的列表迭代器可以向 \inlinepython{ListBox} 的构造函数中传入控件列表. 用户自定义的列表迭代器必须实现列表迭代器接口.
+
+例子 \inlinetext{fib.py} 的代码说明了一个用户自定义列表迭代器的没有保存任何控件. 它使用了连续两个斐波那契数列数字构成的二元组作为位置信息, 并且动态的产生文本控件. 结果就是 \inlinepython{ListBox} 是一个可以向下无尽滚动的列表. 例子 \inlinetext{edit.py} 的代码展示了, 利用一个文本文件加载用户自定义列表迭代器, 可以用于非常大文件的打开以及显示. 例子 \inlinetext{browse.py} 说明一个用户自定义列表迭代器使用字符串元组作为位置对象, 其中一个表示父目录, 一个表示选中的文件. 该控件被缓存在一个单独的类当中, 并且用父目录索引字典来访问. 实现了只根据需要读取目录. 用户自定义列表迭代器也支持通过折叠来隐藏目录.
 
 \subsubsection{设置焦点}
+修改 \inlinepython{ListBox} 焦点控件的最简单的方法是调用 \inlinepython{ListBox.set_focus()} 函数. 该方法无需知道 \inlinepython{ListBox} 的长和宽. 传入 \inlinepython{set_focus()} 函数的位置对象必须与列表遍历器兼容. 对于 \inlinepython{SimpleListWalker} 来说, 位置对象必须是整数索引.
+
+\indent 如果你知道原来的位置是在之前的位置之上还是之下, 你需要设置 \inlinepython{coming_from} 参数. 当 \inlinpython{ListBox} 完成偏移量和百分比的设置后, 它会尝试去寻找原来的控件. 如果原来的控件仍然是可见的, 它将试图避免引发 \inlinpython{ListBox} 的内容从原来的位置向上或向下滚动. 如果控件是不可见的, 那么 \inlinpython{ListBox} 将:%
+%
+\begin{itemize}
+  \item 在 \inlinpython{ListBox} 的底端显示焦点控件, 如果参数 \inlinepython{coming_from} 的值表示之上;
+  \item 在 \inlinpython{ListBox} 的顶端显示焦点控件, 如果参数 \inlinepython{coming_from} 的值表示之下;
+  \item 在 \inlinpython{ListBox} 的中间显示焦点控件, 如果参数 \inlinepython{coming_from} 的值为 \inlinepython{None};
+\end{itemize}%
+%
+如果你知道新的焦点控件的具体位置, 你应该调用 \inlinepython{ListBox.set_focus_valign()} 函数. 这个方法可以让你指定焦点控件的位置是顶部, 底部, 中部, 相对位置, 或是具体的行数.
+
 
 \subsubsection{列表迭代器}

@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{article}[2019/01/01 qiqi document class]
+\ProvidesClass{./template/article}[2019/01/01 qiqi document class]
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{ctexart}}
 \ProcessOptions\relax
